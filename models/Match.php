@@ -29,14 +29,13 @@ class Match extends \Ilch\Model
     /**
      * Status Code for canceled matches
      * Use this if you do not know if the match
-     * gets ever played. You can remove the match
-     * later.
+     * gets ever played. Alternatively: Remove the
+     * match entirely.
      */
     const CANCELED = -1;
 
     /**
      * Status Code for rescheduled matches
-     * Use this only if there is no new datetime yet.
      */
     const RESCHEDULED = 0;
 
@@ -109,6 +108,11 @@ class Match extends \Ilch\Model
      * @var integer match status
      */
     protected $status;
+
+    /**
+     * @var string json_encoded string with inconstant additional information (Information you do not need for every match)
+     */
+    protected $additional_fields;
 
     /**
      * Sets the matches id
@@ -432,5 +436,28 @@ class Match extends \Ilch\Model
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Sets the additional fields
+     *
+     * @param array $fields An array with additional fields
+     *
+     * @return $this
+     */
+    public function setAdditionalFields($fields)
+    {
+        $this->additional_fields = $fields;
+        return $this;
+    }
+
+    /**
+     * Gets the additional fields
+     *
+     * @return array An array of additional fields
+     */
+    public function getAdditionalFields()
+    {
+        return $this->additional_fields;
     }
 }
