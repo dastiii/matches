@@ -2,9 +2,6 @@
 
 namespace dastiii\Matches\Models;
 
-use \dastiii\Matches\Models\Team as HomeTeam;
-use \dastiii\Matches\Models\Team as GuestTeam;
-
 defined('ACCESS') or die('no direct access');
 
 /**
@@ -54,12 +51,12 @@ class Match extends \Ilch\Model
     protected $datetime;
 
     /**
-     * @var HomeTeam The instance of the home team
+     * @var object The instance of the home team
      */
     protected $home_team;
 
     /**
-     * @var GuestTeam The instance of the guest team
+     * @var object The instance of the guest team
      */
     protected $guest_team;
 
@@ -164,11 +161,11 @@ class Match extends \Ilch\Model
     /**
      * Sets the home team
      *
-     * @param HomeTeam $instance A HomeTeamModel instance
+     * @param object $instance A team model implementing \dastiii\Matches\Models\TeamInterface
      *
      * @return $this
      */
-    public function setHomeTeam(HomeTeam $instance)
+    public function setHomeTeam($instance)
     {
         $this->home_team = $instance;
         return $this;
@@ -187,11 +184,11 @@ class Match extends \Ilch\Model
     /**
      * Sets the guest teams instance
      *
-     * @param GuestTeam $instance The guest teams instance
+     * @param object $instance A team model implementing \dastiii\Matches\Models\TeamInterface
      *
      * @return $this
      */
-    public function setGuestTeam(GuestTeam $instance)
+    public function setGuestTeam($instance)
     {
         $this->guest_team = $instance;
         return $this;
