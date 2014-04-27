@@ -8,7 +8,7 @@
  * @author Tobias Schwarz <tobias.schwarz@gmx.eu>
  */
 
-namespace dastiii\Matches\Mappers;
+namespace Matches\Mappers;
 
 interface TeamInterface
 {

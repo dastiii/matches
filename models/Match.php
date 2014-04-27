@@ -1,6 +1,6 @@
 <?php
 
-namespace dastiii\Matches\Models;
+namespace Matches\Models;
 
 defined('ACCESS') or die('no direct access');
 
@@ -165,7 +165,7 @@ class Match extends \Ilch\Model
     /**
      * Sets the home team
      *
-     * @param object $instance A team model implementing \dastiii\Matches\Models\TeamInterface
+     * @param object $instance A team model implementing \Matches\Models\TeamInterface
      *
      * @return $this
      */
@@ -188,7 +188,7 @@ class Match extends \Ilch\Model
     /**
      * Sets the guest teams instance
      *
-     * @param object $instance A team model implementing \dastiii\Matches\Models\TeamInterface
+     * @param object $instance A team model implementing \Matches\Models\TeamInterface
      *
      * @return $this
      */

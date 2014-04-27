@@ -8,9 +8,9 @@
  * @author Tobias Schwarz <tobias.schwarz@gmx.eu>
  */
 
-namespace dastiii\Matches\Mappers;
+namespace Matches\Mappers;
 
-class Match extends \Ilch\Mapper
+class MatchMapper extends \Ilch\Mapper
 {
 
 }

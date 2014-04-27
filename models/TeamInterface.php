@@ -8,7 +8,7 @@
  * @author Tobias Schwarz <tobias.schwarz@gmx.eu>
  */
 
-namespace dastiii\Matches\Models;
+namespace Matches\Models;
 
 interface TeamInterface
 {

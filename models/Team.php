@@ -1,6 +1,6 @@
 <?php
 
-namespace dastiii\Matches\Models;
+namespace Matches\Models;
 
 defined('ACCESS') or die('no direct access');
 
