@@ -14,30 +14,22 @@ defined('ACCESS') or die('no direct access');
 class Team extends \Ilch\Model implements TeamInterface
 {
     /**
-     * The id of the team.
-     *
-     * @var integer
+     * @var integer The id of the team.
      */
     protected $id;
 
     /**
-     * The name of the team
-     *
-     * @var string
+     * @var string The name of the team
      */
     protected $name;
 
     /**
-     * The abbreviated name of the team
-     *
-     * @var string
+     * @var string The abbreviated name of the team
      */
     protected $short_name;
 
     /**
-     * The logos filepath
-     *
-     * @var string
+     * @var string The logos filepath
      */
     protected $logo;
 
