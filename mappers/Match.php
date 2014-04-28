@@ -10,7 +10,7 @@
 
 namespace Matches\Mappers;
 
-class MatchMapper extends \Ilch\Mapper
+class Match extends \Ilch\Mapper
 {
 
 }

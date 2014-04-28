@@ -10,7 +10,7 @@
 
 namespace Matches\Mappers;
 
-class TeamMapper extends \Ilch\Mapper
+class Team extends \Ilch\Mapper
 {
     protected $db_table = "teams_";
 
