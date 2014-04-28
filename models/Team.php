@@ -11,7 +11,7 @@ defined('ACCESS') or die('no direct access');
  * @package ilch
  * @author Tobias Schwarz <tobias.schwarz@gmx.eu>
  */
-class Team extends \Ilch\Model implements TeamInterface
+class Team extends \Ilch\Model
 {
     /**
      * @var integer The id of the team.

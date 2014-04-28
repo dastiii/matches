@@ -10,8 +10,6 @@
 
 namespace Matches\Mappers;
 
-use Matches\Models\Team;
-
 class TeamMapper extends \Ilch\Mapper
 {
     protected $db_table = "teams_";
@@ -32,7 +30,7 @@ class TeamMapper extends \Ilch\Mapper
             ->execute();
 
         if ($select !== null) {
-            $team = new Team;
+            $team = new \Matches\Models\Team;
             $team
                 ->setId($select['id'])
                 ->setName($select['name'])
