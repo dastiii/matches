@@ -10,6 +10,8 @@
 
 namespace Matches\Mappers;
 
+defined('ACCESS') or die('no direct access');
+
 class Team extends \Ilch\Mapper
 {
     /**
