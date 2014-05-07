@@ -82,7 +82,7 @@ class Match extends \Ilch\Model
     /**
      * @var array Match rounds
      */
-    protected $rounds;
+    protected $rounds = array();
 
     /**
      * @var integer Home team points
@@ -112,7 +112,22 @@ class Match extends \Ilch\Model
     /**
      * @var string json_encoded string with inconstant additional information (Information you do not need for every match)
      */
-    protected $additional_fields;
+    protected $additional_fields = array();
+
+    /**
+     * @var string json_encoded string with settings (e.g. hide a specific field)
+     */
+    protected $settings = array();
+
+    /**
+     * @var boolean Match archived or not
+     */
+    protected $archived;
+
+    /**
+     * @var boolean Match deleted or not
+     */
+    protected $deleted;
 
     /**
      * Sets the matches id
@@ -459,5 +474,74 @@ class Match extends \Ilch\Model
     public function getAdditionalFields()
     {
         return $this->additional_fields;
+    }
+
+    /**
+     * Sets the settings
+     *
+     * @param array $settings An array with settings (key => value)
+     *
+     * @return $this
+     */
+    public function setSettings($settings)
+    {
+        $this->settings = $settings;
+        return $this;
+    }
+
+    /**
+     * Gets the settings
+     *
+     * @return array An array of settings
+     */
+    public function getSettings()
+    {
+        return $this->settings;
+    }
+
+    /**
+     * Sets archived state
+     *
+     * @param boolean $archived
+     *
+     * @return $this
+     */
+    public function setArchived($archived)
+    {
+        $this->archived = $archived;
+        return $this;
+    }
+
+    /**
+     * Checks whether or not the match is archived
+     *
+     * @return boolean
+     */
+    public function isArchived()
+    {
+        return $this->archived;
+    }
+
+    /**
+     * Sets deleted state
+     *
+     * @param boolean $deleted
+     *
+     * @return $this
+     */
+    public function setDeleted($deleted)
+    {
+        $this->deleted = $deleted;
+        return $this;
+    }
+
+    /**
+     * Checks whether or not the match is deleted
+     *
+     * @return boolean
+     */
+    public function isDeleted()
+    {
+        return $this->deleted;
     }
 }

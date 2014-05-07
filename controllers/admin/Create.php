@@ -14,14 +14,14 @@ use \Matches\Mappers\Team as TeamMapper;
 
 defined('ACCESS') or die('no direct access');
 
-class Index extends \Ilch\Controller\Admin
+class Create extends Base
 {
-    public function indexAction()
+    public function init()
     {
-
+        parent::init();
     }
 
-    public function newAction()
+    public function indexAction()
     {
         $opponents = new OpponentMapper;
         $teams = new TeamMapper;
