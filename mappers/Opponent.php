@@ -10,6 +10,9 @@
 
 namespace Matches\Mappers;
 
+use \Matches\Exceptions\Opponent\InsertFailed;
+use \Matches\Exceptions\Opponent\UpdateFailed;
+
 defined('ACCESS') or die('no direct access');
 
 class Opponent extends \Ilch\Mapper
@@ -37,7 +40,7 @@ class Opponent extends \Ilch\Mapper
      */
     public function find($id)
     {
-        $select = $this->db()->selectRow(array('id', 'name', 'short_name', 'logo'))
+        $select = $this->db()->selectRow(array('id', 'name', 'short_name', 'logo', 'url'))
             ->from($this->db_table)
             ->where(array('id' => $id))
             ->limit(1)
@@ -53,6 +56,8 @@ class Opponent extends \Ilch\Mapper
                 ->setUrl($select['url']);
 
             return $opponent;
+        } else {
+            throw new \Matches\Exceptions\Opponent\NotFound("Opponent not found");
         }
 
         return null;
@@ -110,5 +115,63 @@ class Opponent extends \Ilch\Mapper
         }
 
         return $opponents;
+    }
+
+    /**
+     * Saves or updates an opponent to the database
+     *
+     * @param \Matches\Models\Opponent $opponent
+     *
+     * @return \Matches\Models\Opponent
+     */
+    public function save($opponent)
+    {
+        if ($opponent->getId() === 0) {
+            return $this->insert($opponent);
+        } else {
+            return $this->update($opponent);
+        }
+    }
+
+    /**
+     * Inserts a new opponent to the database
+     *
+     * @param \Matches\Models\Opponent $opponent
+     *
+     * @throws \Matches\Exceptions\Opponent\InsertFailed
+     *
+     * @return \Matches\Models\Opponent
+     */
+    protected function insert($opponent)
+    {
+        $fields = array(
+            'name'      => $opponent->getName(),
+            'short_name'=> $opponent->getShortName(),
+            'logo'      => $opponent->getLogo(),
+            'url'       => $opponent->getUrl(),
+        );
+        $erg = $this->db()->insert($this->db_table)->fields($fields)->execute();
+
+        if (!$erg) {
+            throw new InsertFailed("Gegner konnte nicht erstellt werden.");
+        }
+
+        $opponent->setId($erg);
+
+        return $opponent;
+    }
+
+    /**
+     * Updates opponentData to the database
+     *
+     * @param \Matches\Models\Opponent $opponent
+     *
+     * @throws \Matches\Exceptions\Opponent\UpdateFailed
+     *
+     * @return \Matches\Models\Opponent
+     */
+    protected function update($opponent)
+    {
+        throw new UpdateFailed("Gegner konnte nicht erstellt werden.");
     }
 }

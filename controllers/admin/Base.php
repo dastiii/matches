@@ -36,4 +36,15 @@ class Base extends \Ilch\Controller\Admin
             )
         );
     }
+
+    public function input($key = null, $default = null)
+    {
+        return $this->getRequest()->getPost($key, $default);
+    }
+
+    public function t($key)
+    {
+        $args = func_get_args();
+        return call_user_func_array(array($this->getTranslator(), 'trans'), $args);
+    }
 }

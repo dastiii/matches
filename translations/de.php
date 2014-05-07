@@ -48,5 +48,11 @@ return array(
     'points_guest'              => 'Punkte Gast',
     'result'                    => 'Endergebnis',
     'report'                    => 'Bericht',
+    'hide'                      => 'ausblenden',
+
+
+    // Exceptions
+    'opponent_insert_failed'    => 'Gegner konnte nicht gespeichert werden.',
+    'opponent_not_found'        => 'Der ausgewählte Gegner existiert nicht.',
 
 );

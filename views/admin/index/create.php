@@ -9,7 +9,7 @@
 
 defined('ACCESS') or die('no direct access');
 ?>
-<form class="form-horizontal" role="form">
+<form class="form-horizontal" method="post" role="form" action="<?= $this->getUrl(array('action' => 'save')); ?>">
     <?php echo $this->getTokenField(); ?>
     <legend><?= $this->getTrans('create_match') ?></legend>
     <div class="row">
@@ -31,13 +31,13 @@ defined('ACCESS') or die('no direct access');
                 <div class="col-sm-8">
                     <div class="radio">
                         <label>
-                            <input type="radio" class="changeOpponentMethod" name="match[opponentMethod]" value="1" checked>
+                            <input type="radio" class="changeOpponentMethod" name="match[opponent][method]" value="1" checked>
                             <?= $this->getTrans('choose_opponent') ?>
                         </label>
                     </div>
                     <div class="radio">
                         <label>
-                            <input type="radio" class="changeOpponentMethod" name="match[opponentMethod]" value="0">
+                            <input type="radio" class="changeOpponentMethod" name="match[opponent][method]" value="0">
                             <?= $this->getTrans('create_opponent') ?>
                         </label>
                     </div>
@@ -45,7 +45,7 @@ defined('ACCESS') or die('no direct access');
             </div>
             <div id="chose_opponent" class="form-group">
                 <div class="col-sm-8 col-sm-offset-2">
-                    <select data-placeholder="<?= $this->getTrans('choose_opponent') ?>" id="opponent" name="match[opponent]" class="chosen-select form-control">
+                    <select data-placeholder="<?= $this->getTrans('choose_opponent') ?>" id="opponent" name="match[opponent][id]" class="chosen-select form-control">
                         <option></option>
                     <?php foreach ($this->get('opponents') as $opponent): ?>
                         <option value="<?= $opponent->getId() ?>"><?= $opponent->getName() ?></option>
@@ -57,10 +57,10 @@ defined('ACCESS') or die('no direct access');
                 <div class="col-sm-8 col-sm-offset-2">
                     <div class="row">
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" placeholder="<?= $this->getTrans('opponent_name') ?>">
+                            <input type="text" name="match[opponent][name]" class="form-control" placeholder="<?= $this->getTrans('opponent_name') ?>">
                         </div>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" placeholder="<?= $this->getTrans('opponent_short_name') ?>">
+                            <input type="text" name="match[opponent][short_name]" class="form-control" placeholder="<?= $this->getTrans('opponent_short_name') ?>">
                         </div>
                     </div>
                 </div>
@@ -75,7 +75,7 @@ defined('ACCESS') or die('no direct access');
                     <div class="checkbox">
                         <label>
                             <input name="match[settings][hide_guest_lineup]" type="checkbox" value="1">
-                            ausblenden
+                            <?= $this->getTrans('hide') ?>
                         </label>
                     </div>
                 </div>
@@ -96,7 +96,7 @@ defined('ACCESS') or die('no direct access');
                     <div class="checkbox">
                         <label>
                             <input name="match[settings][hide_competition]" type="checkbox" value="1">
-                            ausblenden
+                            <?= $this->getTrans('hide') ?>
                         </label>
                     </div>
                 </div>
@@ -110,7 +110,7 @@ defined('ACCESS') or die('no direct access');
                     <div class="checkbox">
                         <label>
                             <input name="match[settings][hide_matchday]" type="checkbox" value="1">
-                            ausblenden
+                            <?= $this->getTrans('hide') ?>
                         </label>
                     </div>
                 </div>
@@ -144,7 +144,7 @@ defined('ACCESS') or die('no direct access');
                     <div class="checkbox">
                         <label>
                             <input name="match[settings][hide_report]" type="checkbox" value="1">
-                            ausblenden
+                            <?= $this->getTrans('hide') ?>
                         </label>
                     </div>
                 </div>
@@ -165,7 +165,11 @@ defined('ACCESS') or die('no direct access');
             </div>
         </div>
     </div>
-    <?=$this->getSaveBar()?>
+    <div class="content_savebox">
+        <button value="save" type="submit" name="match[save]" class="btn btn-success">Speichern</button>
+        <?php // TODO: Nur zeigen, wenn User das Recht hat, Matches freizuschalten ?>
+        <button value="save_and_approve" name="match[save]" class="btn">Speichern und freigeben</button>
+    </div>
 </form>
 <script src="<?php echo $this->getUrl(); ?>/application/modules/matches/static/js/jquery-ui-timepicker-addon.js"></script>
 <script>

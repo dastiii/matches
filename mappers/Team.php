@@ -52,6 +52,8 @@ class Team extends \Ilch\Mapper
                 ->setLogo($select['logo']);
 
             return $team;
+        } else {
+            throw new \Matches\Exceptions\Team\NotFound("Team not found");
         }
 
         return null;

@@ -42,10 +42,10 @@ class Match extends \Ilch\Model
     /**
      * @var integer The id of the match.
      */
-    protected $id;
+    protected $id = 0;
 
     /**
-     * @var \DateTime The \DateTime object of the match
+     * @var \Ilch\Date The \DateTime object of the match
      */
     protected $datetime;
 
@@ -130,6 +130,11 @@ class Match extends \Ilch\Model
     protected $deleted;
 
     /**
+     * @var boolean Match approved or not
+     */
+    protected $approved;
+
+    /**
      * Sets the matches id
      *
      * @param integer $id The id of the match
@@ -155,11 +160,11 @@ class Match extends \Ilch\Model
     /**
      * Sets the datetime of the match
      *
-     * @param \DateTime $datetime The datetime object of the match
+     * @param \Ilch\Date $datetime The datetime object of the match
      *
      * @return $this
      */
-    public function setDatetime(\DateTime $datetime)
+    public function setDatetime(\Ilch\Date $datetime)
     {
         $this->datetime = $datetime;
         return $this;
@@ -170,7 +175,7 @@ class Match extends \Ilch\Model
      *
      * @param string $format The desired output format of the datetime
      *
-     * @return \DateTime The matches datetime object
+     * @return \Ilch\Date The matches datetime object
      */
     public function getDatetime()
     {
@@ -347,7 +352,7 @@ class Match extends \Ilch\Model
      */
     public function setHomePoints($points)
     {
-        $this->home_points = $points;
+        $this->home_points = (int) $points;
         return $this;
     }
 
@@ -370,7 +375,7 @@ class Match extends \Ilch\Model
      */
     public function setGuestPoints($points)
     {
-        $this->guest_points = $points;
+        $this->guest_points = (int) $points;
         return $this;
     }
 
@@ -543,5 +548,28 @@ class Match extends \Ilch\Model
     public function isDeleted()
     {
         return $this->deleted;
+    }
+
+    /**
+     * Sets approved state
+     *
+     * @param boolean $approved
+     *
+     * @return $this
+     */
+    public function setApproved($approved)
+    {
+        $this->approved = $approved;
+        return $this;
+    }
+
+    /**
+     * Checks whether or not the match is approved
+     *
+     * @return boolean
+     */
+    public function isApproved()
+    {
+        return $this->approved;
     }
 }
