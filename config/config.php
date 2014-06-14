@@ -8,7 +8,7 @@
  * @author Tobias Schwarz <tobias.schwarz@gmx.eu>
  */
 
-namespace Matches\Config;
+namespace Modules\Matches\Config;
 
 defined('ACCESS') or die('no direct access');
 

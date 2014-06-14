@@ -7,7 +7,7 @@
  * @author Tobias Schwarz <tobias.schwarz@gmx.eu>
  */
 
-namespace Matches\Exceptions\Match;
+namespace Modules\Matches\Exceptions\Match;
 
 class NotFound extends \Exception
 {

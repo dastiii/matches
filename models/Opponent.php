@@ -1,6 +1,6 @@
 <?php
 
-namespace Matches\Models;
+namespace Modules\Matches\Models;
 
 defined('ACCESS') or die('no direct access');
 

@@ -7,13 +7,13 @@
  * @author Tobias Schwarz <tobias.schwarz@gmx.eu>
  */
 
-namespace Matches\Controllers\Admin;
+namespace Modules\Matches\Controllers\Admin;
 
-use \Matches\Mappers\Opponent   as OpponentMapper;
-use \Matches\Mappers\Team       as TeamMapper;
-use \Matches\Mappers\Match      as MatchMapper;
-use \Matches\Models\Match;
-use \Matches\Models\Opponent;
+use \Modules\Matches\Mappers\Opponent   as OpponentMapper;
+use \Modules\Matches\Mappers\Team       as TeamMapper;
+use \Modules\Matches\Mappers\Match      as MatchMapper;
+use \Modules\Matches\Models\Match;
+use \Modules\Matches\Models\Opponent;
 
 defined('ACCESS') or die('no direct access');
 
@@ -26,7 +26,57 @@ class Index extends Base
 
     public function indexAction()
     {
+        $data = ['name' => 'a', 'datetime' => '28.05.2014 13:31:21', 'password' => '12345', 'password_confirmation' => '123456'];
 
+        $validation = new \Ilch\Validator;
+        $validation->addRules([
+            'name' => [
+                'required',
+                'maxLength' => 30,
+                'minLength' => 5,
+                'breakChain',
+                'filters' => [
+                    'before' => ['ucfirst' => [\Ilch\Validator::SELF]],
+                    'after'  => [
+                        'trim' => [\Ilch\Validator::SELF]
+                    ]
+                ]
+            ],
+            'datetime' => [
+                'required',
+                'datetime' => [
+                    'format' => 'd.m.Y H:i:s',
+                ],
+            ],
+            'password' => [
+                'required',
+                'minLength' => '6',
+                'same' => [
+                    'as' => 'password_confirmation'
+                ],
+                'filters' => [
+                    'after' => ['crypt' => [\Ilch\Validator::SELF]]
+                ],
+                'breakChain'
+            ],
+        ]);
+
+
+
+        dumpVar(function_exists('DateTime::createFromFormat'));
+
+        if (class_exists('DateTime::createFromFormat')) {
+            echo "Geht";
+        }
+
+        $validation->validate($data);
+
+        dumpVar($validation);
+
+        $filter = new \Ilch\Filters\StringToLower;
+        echo $filter->filter('ICH BIN UPPERCASE');
+
+        $this->getRequest()->setIsAjax(true);
     }
 
     public function createAction()
@@ -51,7 +101,7 @@ class Index extends Base
 
                 try {
                     $opponent = $opponentMapper->save($opponent);
-                } catch (\Matches\Exceptions\Opponent\InsertFailed $e) {
+                } catch (\Matches\Exceptions\InsertFailed $e) {
                     // TODO: Log
                     $this->addMessage($this->t("opponent_insert_failed"), "danger");
                     $this->redirect(array('action' => 'create'));
@@ -59,7 +109,7 @@ class Index extends Base
             } else {
                 try {
                     $opponent = $opponentMapper->find((int)$this->input('match.opponent.id'));
-                } catch (\Matches\Exceptions\Opponent\NotFound $e) {
+                } catch (\Matches\Exceptions\NotFound $e) {
                     // TODO: Log
                     $this->addMessage($this->t("opponent_not_found"), "danger");
                     $this->redirect(array('action' => 'create'));
@@ -69,7 +119,7 @@ class Index extends Base
             try {
                 $teamMapper = new TeamMapper;
                 $team = $teamMapper->find((int)$this->input('match.team'));
-            } catch (\Matches\Exceptions\Team\NotFound $e) {
+            } catch (\Matches\Exceptions\NotFound $e) {
                 // TODO: Log
                 // Make it compatible to the coming teams module
                 $this->addMessage($this->t("team_not_found"), "danger");
@@ -85,8 +135,8 @@ class Index extends Base
                 'hide_report'       => (bool) $this->input('match.settings.hide_report'),
             );
 
-            $match->setHomeTeam($team->getId())
-                  ->setGuestTeam($opponent->getId())
+            $match->setHomeTeam($team)
+                  ->setGuestTeam($opponent)
                   ->setGuestLineup($this->input('match.guest_lineup'))
                   ->setGame($this->input('match.game'))
                   ->setCompetition($this->input('match.competition'))
@@ -105,7 +155,7 @@ class Index extends Base
 
                 $this->addMessage("match_saved");
                 $this->redirect(array('action' => 'index'));
-            } catch (\Matches\Exceptions\Match\InsertFailed $e) {
+            } catch (\Matches\Exceptions\InsertFailed $e) {
                 // TODO: Log
                 $this->addMessage($this->t("match_insert_failed"), "danger");
                 $this->redirect(array('action' => 'create'));

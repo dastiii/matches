@@ -8,10 +8,13 @@
  * @author Tobias Schwarz <tobias.schwarz@gmx.eu>
  */
 
-namespace Matches\Mappers;
+namespace Modules\Matches\Mappers;
 
-use \Matches\Exceptions\Opponent\InsertFailed;
-use \Matches\Exceptions\Opponent\UpdateFailed;
+use \Modules\Matches\Exceptions\InsertFailed;
+use \Modules\Matches\Exceptions\UpdateFailed;
+use \Modules\Matches\Exceptions\NotFound;
+
+use \Modules\Matches\Models\Opponent as Model;
 
 defined('ACCESS') or die('no direct access');
 
@@ -40,24 +43,28 @@ class Opponent extends \Ilch\Mapper
      */
     public function find($id)
     {
-        $select = $this->db()->selectRow(array('id', 'name', 'short_name', 'logo', 'url'))
+        $select = $this->db()->select();
+        $result = $select->fields(['id', 'name', 'short_name', 'logo', 'url'])
             ->from($this->db_table)
-            ->where(array('id' => $id))
+            ->where(['id' => $id])
             ->limit(1)
             ->execute();
 
-        if ($select !== null) {
-            $opponent = new \Matches\Models\Opponent;
+        if ($result->getNumRows() === 1) {
+
+            $data = $result->fetchAssoc();
+
+            $opponent = new Model;
             $opponent
-                ->setId($select['id'])
-                ->setName($select['name'])
-                ->setShortName($select['short_name'])
-                ->setLogo($select['logo'])
-                ->setUrl($select['url']);
+                ->setId($data['id'])
+                ->setName($data['name'])
+                ->setShortName($data['short_name'])
+                ->setLogo($data['logo'])
+                ->setUrl($data['url']);
 
             return $opponent;
         } else {
-            throw new \Matches\Exceptions\Opponent\NotFound("Opponent not found");
+            throw new NotFound("Opponent not found");
         }
 
         return null;
@@ -67,14 +74,15 @@ class Opponent extends \Ilch\Mapper
      * Finds all opponents
      *
      * @param array|null $criteria Find teams matching this criteria
-     *                             NOTE: Limit gets overriden if you pass in a Pagination instance
+     *                             NOTE: Limit gets overwritten if you pass in a Pagination instance
      * @param \Ilch\Pagination|null $pagination Pagination instance
      *
      * @return array Empty array or array with \Matches\Models\Opponent instances
      */
     public function findAll($criteria = null, $pagination = null)
     {
-        $select = $this->db()->selectArray(array('id', 'name', 'short_name', 'logo', 'url'))
+        $select = $this->db()->select();
+        $result = $select->fields(['id', 'name', 'short_name', 'logo', 'url'])
             ->from($this->db_table);
 
         $dbCriteria = $this->default_criteria;
@@ -84,27 +92,27 @@ class Opponent extends \Ilch\Mapper
         }
 
         if ($dbCriteria['where']) {
-            $select->where($dbCriteria['where']);
+            $result->where($dbCriteria['where']);
         }
 
         if ($dbCriteria['order']) {
-            $select->order($dbCriteria['order']);
+            $result->order($dbCriteria['order']);
         }
 
         if ($dbCriteria['limit']) {
-            $select->limit($dbCriteria['limit']);
+            $result->limit($dbCriteria['limit']);
         }
 
         if ($pagination !== null) {
-            $select->limit($pagination->getLimit());
-            $pagination->setRows($select->getCount());
+            $result->limit($pagination->getLimit());
+            $pagination->setRows($result->getNumRows());
         }
 
-        $rows = $select->execute();
+        $result = $result->execute();
         $opponents = array();
 
-        foreach ($rows as $row) {
-            $opponent = new \Matches\Models\Opponent;
+        while ($row = $result->fetchAssoc()) {
+            $opponent = new Model;
             $opponent
                 ->setId($row['id'])
                 ->setName($row['name'])
@@ -144,19 +152,20 @@ class Opponent extends \Ilch\Mapper
      */
     protected function insert($opponent)
     {
-        $fields = array(
-            'name'      => $opponent->getName(),
-            'short_name'=> $opponent->getShortName(),
-            'logo'      => $opponent->getLogo(),
-            'url'       => $opponent->getUrl(),
-        );
-        $erg = $this->db()->insert($this->db_table)->fields($fields)->execute();
+        $insert = $this->db()->insert();
+        $opponentId = $insert->into($this->db_table)
+            ->values([
+                'name'      => $opponent->getName(),
+                'short_name'=> $opponent->getShortName(),
+                'logo'      => $opponent->getLogo(),
+                'url'       => $opponent->getUrl(),
+            ])->execute();
 
-        if (!$erg) {
+        if (!$opponentId) {
             throw new InsertFailed("Gegner konnte nicht erstellt werden.");
         }
 
-        $opponent->setId($erg);
+        $opponent->setId($opponentId);
 
         return $opponent;
     }

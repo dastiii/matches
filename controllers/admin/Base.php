@@ -7,7 +7,7 @@
  * @author Tobias Schwarz <tobias.schwarz@gmx.eu>
  */
 
-namespace Matches\Controllers\Admin;
+namespace Modules\Matches\Controllers\Admin;
 
 defined('ACCESS') or die('no direct access');
 

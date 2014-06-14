@@ -1,15 +1,15 @@
 <?php
 /**
- * Opponent not found exception
+ * Match insert failed exception
  *
  * @copyright Ilch 2.0
  * @package ilch
  * @author Tobias Schwarz <tobias.schwarz@gmx.eu>
  */
 
-namespace Matches\Exceptions\Opponent;
+namespace Modules\Matches\Exceptions;
 
-class NotFound extends \Exception
+class InsertFailed extends \Exception
 {
 
 }

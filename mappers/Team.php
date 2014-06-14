@@ -8,7 +8,13 @@
  * @author Tobias Schwarz <tobias.schwarz@gmx.eu>
  */
 
-namespace Matches\Mappers;
+namespace Modules\Matches\Mappers;
+
+use \Modules\Matches\Exceptions\InsertFailed;
+use \Modules\Matches\Exceptions\UpdateFailed;
+use \Modules\Matches\Exceptions\NotFound;
+
+use \Modules\Matches\Models\Team as Model;
 
 defined('ACCESS') or die('no direct access');
 
@@ -43,8 +49,15 @@ class Team extends \Ilch\Mapper
             ->limit(1)
             ->execute();
 
-        if ($select !== null) {
-            $team = new \Matches\Models\Team;
+        $select = $this->db()->select();
+        $result = $select->fields(['id', 'name', 'short_name', 'logo'])
+            ->from($this->db_table)
+            ->where(['id' => $id])
+            ->limit(1)
+            ->execute();
+
+        if ($result->getNumRows() === 1) {
+            $team = new Model;
             $team
                 ->setId($select['id'])
                 ->setName($select['name'])
@@ -53,39 +66,10 @@ class Team extends \Ilch\Mapper
 
             return $team;
         } else {
-            throw new \Matches\Exceptions\Team\NotFound("Team not found");
+            throw new NotFound("Team not found");
         }
 
         return null;
-    }
-
-    /**
-     * Retrieve all teams whose name is like $name
-     *
-     * @param string $name The name to look for
-     *
-     * @return array An array of teams
-     */
-    public function findByNameLike($name)
-    {
-        $sql = "SELECT `id`, `name` FROM [prefix]_{$this->db_table} WHERE `name` LIKE '%{$this->db()->escape($name)}%' ORDER BY `name`";
-        $teamsArray = $this->db()->queryArray($sql);
-
-        if (empty($teamsArray)) {
-            return array();
-        }
-
-        $teams = array();
-
-        foreach ($teamsArray as $row) {
-            $team = new \Matches\Models\Team;
-            $team
-                ->setId($row['id'])
-                ->setName($row['name']);
-            $teams[] = $team;
-        }
-
-        return $teams;
     }
 
     /**
@@ -95,28 +79,29 @@ class Team extends \Ilch\Mapper
      */
     public function findAll()
     {
-        $select = $this->db()->selectArray(array('id', 'name', 'short_name', 'logo'))
+        $select = $this->db()->select();
+        $result = $select->fields(['id', 'name', 'short_name', 'logo'])
             ->from($this->db_table);
 
         $dbCriteria = $this->default_criteria;
 
         if ($dbCriteria['where']) {
-            $select->where($dbCriteria['where']);
+            $result->where($dbCriteria['where']);
         }
 
         if ($dbCriteria['order']) {
-            $select->order($dbCriteria['order']);
+            $result->order($dbCriteria['order']);
         }
 
         if ($dbCriteria['limit']) {
-            $select->limit($dbCriteria['limit']);
+            $result->limit($dbCriteria['limit']);
         }
 
-        $rows = $select->execute();
+        $result = $result->execute();
         $teams = array();
 
-        foreach ($rows as $row) {
-            $team = new \Matches\Models\Team;
+        while ($row = $result->fetchAssoc()) {
+            $team = new Model;
             $team
                 ->setId($row['id'])
                 ->setName($row['name'])
